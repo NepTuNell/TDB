@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+   
+    <div class="row" style=" margin-top: 2%; margin-bottom: 2%;">
+        <div class="offset-lg-3 col-lg-2 offset-1 col-3"> 
+            <button class="btn btn-primary button-size" onclick="window.location.href='{{ path('admin_referentiel_edit') }}'">
+                <i class="fas fa-plus-circle"></i>Nouveau
+            </button>
+        </div>
+    </div>
+        
+    <div class="row">
+        <div class="offset-lg-3 col-lg-6 offset-lg-3 offset-1 col-9 offset-1" id="table_div">
+            {%if referentiels is defined%}
+                <table class="table table-hover">
+                    <tr><th>Libelle</th></tr>
+                    {% for referentiel in referentiels %}
+                        <tr> 
+                            <td> {{ referentiel.libelle }} </td> 
+                            <td> <a href="{{ path('admin_referentiel_edit', {'referentiel' : referentiel.id}) }}">Modifier</a> </td> 
+                            <td> <a href="{{ path('admin_referentiel_delete', {'referentiel' : referentiel.id}) }}">Supprimer</a> </td> 
+                        </tr> 
+                    {%endfor%}
+                </table>
+            {% endif%}
+        </div>
+    </div>
+        
+    <div class="row" style=" margin-top: 2%;">
+        <div class="offset-lg-3 col-lg-2 offset-1 col-3"> 
+            <button class="btn btn-primary button-size" onclick="window.location.href='{{ path('admin_dashboard') }}'">
+                Retour
+            </button> 
+        </div>
+    </div>
+            
+{% endblock %}

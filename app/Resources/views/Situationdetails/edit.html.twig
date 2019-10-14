@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="page_content row">
+
+        <div class="offset-1 col-10 offset-1">
+
+            <h2 class="col-12 text-center">Modification de la situation</h2>
+
+            <div class="form-group">
+
+                {{ form_start(form, {'action': path('situation_details_edit', {'id': situationDetail.id}), 'method': 'post', 'attr': {'novalidate': 'novalidate'}})
+                            }}
+
+                <div class="form-group row">
+                    {{ form_label(form.competences, 'Compétences mises en oeuvre', {'label_attr': {'class': 'col-12'} }) }}
+                    {{ form_widget(form.competences, {'attr': {'class': 'form-control col-12'} }) }}
+                </div>
+
+                <div class="form-group row">
+                    {{ form_label(form.description, 'Description de la situation', {'label_attr': {'class': 'col-12'} }) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control col-12'} }) }}
+                </div>
+
+                <table class="table col-12">
+                    <tbody class="pictures" data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}">
+                        {% for picture in situationDetail.pictures %}
+                            <tr>
+                                <td class="col-6">
+                                    <img class="col-12" alt="{{picture.alt}}" src="{{asset('uploads/img/'~picture.getFileName())}}"/>
+                                </td>
+                                <td class="col-4">
+                                    {{form_widget(form.pictures[loop.index0])}}
+                                </td>
+                                <td class="col-2">
+                                    <button style="margin: auto;" type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('situation_details_delete_picture', {'id' : picture.id}) }}'">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="form-group row" style="margin-top: 2%;">
+                    <div class="col-2">
+                        <input class="btn btn-primary" type="submit" value="Valider"/>
+                    </div>
+                </div>
+
+                {{ form_end(form) }}
+
+                <div>
+                    <button class="btn btn-primary" onclick="window.location.href='{{path('situation_details_show', {'user' : situationDetail.situation.user.id, 'situation': situationDetail.situation.id})}}'">Retour</button>
+                </div>
+
+            </div>
+        </div>
+
+
+        {{ include('Templates/Error/flash.html.twig') }}
+        {{ include('Templates/Error/message.html.twig') }}
+        {{ include('Templates/Error/error.html.twig') }}
+
+    </div>
+
+    <script>
+        {{ include('Situationdetails/Javascript/editorJS.js') }}</script>
+
+{% endblock %}

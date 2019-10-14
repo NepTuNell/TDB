@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    
+    <div class="row page_content">
+       
+        <div class="col-12 text-center"><h2>Tableau de bord</h2></div>
+        
+        <table class="table table-hover offset-2 col-8 offset-2" id="table_admin">
+            <tr>
+                <th>Contrôle des éléments postés</th>
+                <td>
+                    <button class="btn btn-secondary button-size" onclick="window.location.href='{{path('admin_view_posts')}}'">      
+                        Voir
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <th>Contrôle des comptes utilisateurs</th>
+                <td>
+                    <button class="btn btn-secondary button-size" onclick="window.location.href='{{path('admin_view_accounts')}}'">      
+                        Voir
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <th>Contrôle des référentiels</th>
+                <td>
+                    <button class="btn btn-secondary button-size" onclick="window.location.href='{{path('admin_referentiel_list')}}'">      
+                        Voir
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <th>Contrôle des compétences</th>
+                <td>
+                    <button class="btn btn-secondary button-size" onclick="window.location.href='{{path('admin_competences_list')}}'">      
+                        Voir
+                    </button>
+                </td>
+            </tr>
+        </table>
+        
+    </div>
+        
+{% endblock %}

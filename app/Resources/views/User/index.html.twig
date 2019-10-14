@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="row">
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+    <!-- Traitement de l'affichage des situations OU des utilisateurs -->
+    <div class="col-2 user_nav" id="userNavigation">
+        {{include('Templates/Navigation/userNav.html.twig')}}
+    </div>
+
+    <section class="col-10 page_content" id="main_page">
+
+        <!-- Affichage de la description utilisateur si pas sur les situations -->
+        {{include('Templates/userSituationDetails.html.twig')}}
+
+    </section>
+
+    {% else %}
+
+    <div class="col-12 text-center">
+        <h2>Bienvenue !</h2>
+        <br><br>
+    </div>
+    <div class="col-12 text-center">
+        <p>
+            Ce site a été conçu dans le but de partager vos expériences professionnelles dans le cadre de votre BTS
+            Service Informatique aux Organisations.<br>
+            Veuillez vous connecter afin de partager vos expériences professionnelles et visualiser celles des autres
+            !<br><br>
+            Vous n'avez pas encore de compte ? <br>
+            <a href="{{ path('user_new') }}">C'est par ici !</a>
+        </p>
+    </div>
+
+    {% endif %}
+</div>
+
+<script>
+    {{ include('User/Javascript/index.js') }}
+</script>
+{% endblock %}

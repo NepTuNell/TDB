@@ -1,0 +1,400 @@
+/*//////////////////////////////// 
+//            POLICE            //
+////////////////////////////////*/
+
+@font-face {
+    font-family: "Corbel";
+    src: url("/TDB/web/fonts/corbel/CORBEL.TTF");
+}
+
+/*///////////////////////////////////////
+//      TRAITEMENT DU CORPS DE PAGE    //
+///////////////////////////////////////*/
+
+body {
+    position: relative;
+    min-height: 100vh;
+    font-family: "Corbel";
+}
+    
+#main_navigation {  
+    background-color: rgb(0, 5, 90);
+    border-color: white;
+    border-bottom-style: groove;
+    border-width: 3px;
+    min-height: 6vh;
+    width: auto;
+    font-weight: bold;
+    color: white;
+}
+
+#main_navigation>div>ul>li>a  {
+    color: white;
+    white-space: nowrap;
+    font-size: 1vw;
+}
+
+#main_navigation>div>div>a {
+    color: white;
+    white-space: nowrap;
+    font-size: 1vw;
+}
+
+#main_navigation>div>div {
+    color: white;
+    white-space: nowrap;
+    font-size: 1vw;
+}
+
+#backGround {
+    padding-bottom: 6vh;
+    height: 88vh;
+}
+
+#main_footer{  
+    background-color: rgb(0, 5, 90);
+    border-color: white;
+    border-top-style: groove;
+    border-width: 3px;
+    font-weight: bold;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    height: 6vh;
+    width: 100%;
+}
+
+/*///////////////////////////////////
+//          FENETRE MODALE         //
+///////////////////////////////////*/
+
+.modal {
+    display: none;
+    background-color: rgba(88, 80, 80, 0.5);
+    color: white;
+    padding:15px;
+    border-radius:3px;
+    box-shadow:0 0 2px rgba(0,0,0,.5);
+    font-size: 0.8vw;
+    height: 35vh;
+    width: 15vw;
+    position: absolute;
+    top: 6vh;
+    left: 85vw;
+}
+
+#modalName {
+    font-size: 1.1vw;
+    font-weight: bold;
+    color: white;
+}
+
+.modalDiv {
+    margin-top: 15%;
+    margin-bottom: 15%; 
+    font-size: 1vw;
+    font-weight: bold;
+}
+
+/*///////////////////////////////////////////
+//          FENETRE MODALE DASHBOARD       //
+///////////////////////////////////////////*/
+
+#modalDashboard {
+    display: none;
+    background-color: rgba(88, 80, 80, 0.5);
+    border-radius:3px;
+    box-shadow:0 0 2px rgba(0,0,0,.5);
+    height: 25%;
+    width: 35%;
+    position: absolute;
+    top: 37.5%;
+    left: 32.5%;
+    overflow-y: auto;
+}
+
+#modalDashboardText {
+    font-size: 1.1vw;
+    color: white;
+}
+
+.modalDashboardClose {
+    color: white;
+}
+
+.modalDashboardClose:hover {
+    cursor: pointer;
+}
+
+/*////////////////////////// 
+//      FORMULAIRE        //
+//////////////////////////*/
+
+form {
+    margin-top: 5%; 
+    margin-bottom: 5%;
+}
+
+.form-group {
+    margin-bottom: 3%;
+}
+    
+
+::placeholder {
+    color: blue;
+    font-size: 1vw;
+}
+    
+
+/*/////////////////////////////////////////
+//      AFFICHAGE DONNEES PARTAGEES      //
+/////////////////////////////////////////*/
+
+.page_content {
+    height: 88vh;
+    padding: 2%;
+    overflow-y: auto;
+}
+
+.text_situtation {
+    overflow-wrap: break-word;  
+}
+
+div .text_situtation:hover{
+    background-color: rgba(155, 200, 200, 0.5);
+}
+
+.carousel {
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.sectionSituationButton {
+    margin-bottom: 5%;
+}
+
+/*/////////////////////////////
+//       LISTE ET IMAGE      //
+/////////////////////////////*/
+
+ul {
+    list-style: none;
+}
+
+i  {
+    margin-right: 3%;
+}
+
+.image_carousel {
+    max-width: 100%;
+    max-height: 650px;
+}
+
+/*//////////////////////////////////
+//     POPUP PAGE CONNEXION       //
+//////////////////////////////////*/
+
+.popup {
+   position: relative;
+}
+
+.popup > span {
+    display: none;
+}
+
+.popup:hover > span {
+    display: block;
+    color:#09c;
+    background:rgba(0,0,0,.9);
+    padding:15px;
+    border-radius:3px;
+    box-shadow:0 0 2px rgba(0,0,0,.5);
+    font-size: 0.8vw;
+}
+
+
+/*//////////////////////////////////
+//            DESKTOP             //
+//////////////////////////////////*/
+@media (min-width: 769px) {
+    
+    /*///////////////////////////////////////
+    //      TRAITEMENT DES FORMULAIRES     //
+    ///////////////////////////////////////*/
+    
+    textArea {
+        min-height: 30vh;
+    }
+
+    /*//////////////////////
+    //      BOUTTONS      //
+    //////////////////////*/
+     
+    .button-size {
+        font-size: 0.6vw;
+        font-weight: bold;
+        white-space: nowrap;
+        padding-left: 2%;
+        padding-right: 2%;
+    }
+    
+    /*//////////////////////////
+    //      NAVIGATION        //
+    //////////////////////////*/
+
+    .user_nav {  
+        position: relative;
+        height: 88vh;
+        border-right-style: solid;
+        border-width: 1px;
+        border-color: rgb(183, 221, 255);
+        background-color : rgb(20, 30, 135);
+        overflow-y: scroll;
+    }
+    
+    .user_nav_lib {
+        font-size: 1.2vw;
+        margin-top: 5%;
+        font-weight: bold;
+        color: white;
+        text-decoration: underline;
+    }
+    
+    .user_nav_li {
+        margin-top: 10%;
+        font-size: 1vw;
+        color: white;
+    }
+    
+    .user_nav_li > a {
+        color: white;
+    }
+
+    .user_nav_li:hover{
+        text-decoration: underline;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .userNavEye {
+        position: absolute;
+        top: 0%;
+        right: 0vw;
+        margin-top: 2%;
+        color: white;
+        z-index: 2;
+    }
+    
+    .userNavUndo {
+        position: absolute;
+        top: 0%;
+        left: 1%;
+        margin-top: 2%;
+        color: white;
+        z-index: 2;
+    }
+
+    /*/////////////////////////////////////////////
+    //      AFFICHAGE INFORMATIONS PARTAGEES     //
+    /////////////////////////////////////////////*/
+    
+    #situation_libelle {
+        overflow-wrap: break-word; 
+        font-weight: bold;
+        font-size: 1.8vw;
+    }
+    
+    .referentiel_libelle {
+        overflow-wrap: break-word; 
+        font-weight: bold;
+        color: rgb(0, 105, 172);
+        font-size: 1vw;
+    }
+
+    .competence_libelle {
+        overflow-wrap: break-word;
+        font-size: 0.8vw;
+        color: rgb(0, 105, 172);
+        text-decoration: underline;
+    }
+
+    #user_username {
+        overflow-wrap: break-word; 
+        font-weight: bold;
+        font-size: 1.8vw;
+        margin-bottom: 8%;
+    }
+    
+    .user_description {
+        overflow-wrap: break-word; 
+        font-size: 1vw;
+    }
+
+    /*/////////////////////////////////////////////
+    //                  TABLES                   //
+    /////////////////////////////////////////////*/
+
+    #table_div {
+        max-height: 25vw; 
+        overflow: auto;
+    }
+
+    /*/////////////////////////////////////////////
+    //             ADMINISTRATION                //
+    /////////////////////////////////////////////*/
+
+    #table_admin tr th {
+        height: 4vw;
+        vertical-align: middle;
+    }
+
+    #table_admin tr td {
+        height: 4vw;
+        vertical-align: middle;
+    }
+
+    /*/////////////////////////////////////////////
+    //              TABLEAU DE BORD              //
+    /////////////////////////////////////////////*/
+
+    #page_table_dashboard {
+        max-height: 88vh;
+        overflow: auto;
+    }
+
+    #dashboard_entete {
+        background: rgb(215, 248, 255);
+    }
+    
+    p.dashboard {
+        color: rgb(0, 105, 172);
+        font-weight: bold;
+        writing-mode: vertical-rl;
+        text-orientation: sideways;
+        transform: rotate(180deg);
+        height: 20vw;
+        text-align: left;
+    }
+
+    td.dashboard {
+        background-color: rgb(0, 105, 172);
+        font-weight: bold;
+        text-align: center;
+        border-left-style: solid;
+        border-right-style: solid;
+        border-width: 1px;
+    }
+
+    .dashboard_situation {
+        min-width: 15vw;
+        max-width: 25vw;
+        overflow-wrap: break-word;
+    }
+
+}
+
+ 
+
+
+
+

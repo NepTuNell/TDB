@@ -1,0 +1,9 @@
+#!/bin/bash
+
+chmod 777 ./var/cache
+rm -R ./var/cache
+
+php bin/console cache:clear
+chmod 777 -R ./var/cache
+
+echo "Mise à jour des droits terminé !"  

@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    
+    <div class="row">
+            
+        {{ include('Templates/Navigation/userNavProfile.html.twig') }}
+            
+        <div class="col-10 page_content"> 
+            <h2 class="col-12 text-center" >Mon entreprise</h2>
+            <div class="form-group col-12"> 
+                {{ form_start(form, {'action': path('user_edit_description'), 'method': 'post', 'attr': {'novalidate': 'novalidate'}}) }}
+                    <div class="form-group row">
+                        {{ form_widget(form.description) }}
+                    </div>
+                    {{ include('Templates/Profile/Button/buttonModify.html.twig') }} 
+                {{ form_end(form) }}
+            </div>
+        </div> 
+            
+        {{ include('Templates/Error/error.html.twig') }}
+        {{ include('Templates/Error/message.html.twig') }}
+
+    </div>
+   
+{% endblock %}

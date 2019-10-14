@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="row page_content">
+        <h2 class="col-12 text-center" style="margin-bottom: 2%;">Contrôle des posts</h2>
+
+        <div class="col-2" style="margin-bottom: 2%;">Filtres :
+            <select id="selectFilter" onchange="viewPosts()" style="margin-left: 10%;">
+                <option value="0">Tous</option>
+                <option value="1">Activé</option>
+                <option value="2">Désactivé</option>
+            </select>
+        </div>
+
+        <table class="table text-center col-12" id="table.posts" style="overflow-wrap: break-word; margin-bottom: 2%;"></table>
+
+        <div class="offset-2 col-8 offset-2" id="post"></div>
+    </div>
+    <script>
+        {{ include('Admin/Javascript/userPost.js') }}</script>
+
+{% endblock %}
