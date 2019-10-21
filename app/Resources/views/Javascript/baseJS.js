@@ -1,17 +1,8 @@
-
 //////////////////////////////////////////////
 //      TRAITEMENT DE LA FENETRE MODALE     //
 //////////////////////////////////////////////
-
 var imgMod = document.getElementById("modalImage");
 var winMod = document.getElementById("modalWindow");
-
-/**
-* Passage de la fenêtre modale en visible
-*/
-imgMod.onmouseover = function () {
-    winMod.style.display = "flex";
-}
 
 /*
 * Test de la position du curseur pour fermeture de la fenêtre sur clic
@@ -23,15 +14,25 @@ document.getElementsByTagName('body')[0].onclick = function (event) {
     }
 
     var winModPosition = winMod.getBoundingClientRect();
-
-    if (event.clientY < winModPosition['bottom'] && event.clientY > winModPosition['top'] &&
-        event.clientX > winModPosition['left'] && event.clientX < winModPosition['right']) {
+    var imgModPosition = imgMod.getBoundingClientRect();
+    
+    if (event.clientY < imgModPosition['bottom'] && event.clientY > imgModPosition['top'] &&
+        event.clientX > imgModPosition['left'] && event.clientX < imgModPosition['right']) {
 
         winMod.style.display = "flex";
 
     } else {
 
-        winMod.style.display = "none";
+        if (event.clientY < winModPosition['bottom'] && event.clientY > winModPosition['top'] &&
+            event.clientX > winModPosition['left'] && event.clientX < winModPosition['right']) {
+
+            winMod.style.display = "flex";
+
+        } else {
+
+            winMod.style.display = "none";
+
+        }
 
     }
 
@@ -54,19 +55,6 @@ function deleteRefDetails() {
     }
 
 }
-
-////////////////////////////////
-//      GESTION DU TEMPS      //
-////////////////////////////////
-
-function printTime() {
-
-    var date = new Date();
-    var heure = date.toLocaleTimeString("fr");
-    document.getElementById('time').innerHTML = heure;
-
-}
-
 
 //////////////////////////////////////////////////
 //        GESTION DU CHARGEMENT DES PAGES       //
@@ -149,6 +137,7 @@ function showUser() {
 
             for (var i = 0; i < users.length; i++) {
 
+                document.getElementsByTagName("body")[0].style.cursor = "default";
                 var url = Routing.generate('user_show', { 'id': users[i].id });
                 var color = (users[i].roles[0] === "ROLE_ADMIN" ? "rgba(17, 135, 165, 0.4)" : "rgba(155, 155, 153, 0.1)");
 
@@ -164,10 +153,14 @@ function showUser() {
 
             }
 
-        } else if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status !== 200 && httpRequest.status !== 0)) {
+        } else if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status !== 200 || httpRequest.status !== 0)) {
 
             alert("Erreur de chargement des données !");
             return false;
+
+        } else {
+
+                document.getElementsByTagName("body")[0].style.cursor = "wait";
 
         }
 

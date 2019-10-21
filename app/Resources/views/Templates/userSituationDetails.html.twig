@@ -1,13 +1,9 @@
-<!---------------------------------------------------------------
-|           AFFICHAGE DES SITUATIONS DE L'UTILISATEUR 
------------------------------------------------------------------>
-
 {% if situation is defined and situation is not null %}
     {% if situationDetailsListe is defined and situationDetailsListe is not null %}
 
         <!-- Affichage du référentiel et des situations correspondantes -->
         <div class="row">
-            <div class="col-lg-12 col-12 text-center">
+            <div class="col-12 text-center">
                 <strong>
                     <span id="situation_libelle">
                         {{ situation.libelle | striptags | nl2br }}
@@ -26,28 +22,24 @@
             <!-- Affichage des informations de la description -->
             <div class="row">
 
-                <div class="col-2" style="font-size: 1vw">
+                <div class="col-lg-2 col-4" style="font-size: 1.2em">
                     <bold>Compétences :</bold>
                 </div>
-                <div class="col-10">
+                <div class="col-lg-10 col-8">
                     {% for competence in situationDetails.competences %}
                         <div class="competence_libelle">{{competence}}</div>
                     {% endfor %}
                     <br><br><br><br>
                 </div>
 
-                <div class="col-12 text_situation">
+                <div class="col-12 user_description">
                     {{ situationDetails.description | raw | nl2br  }}
                 </div>
 
             </div>
 
-            <!-----------------------------------------------
-            |     TRAITEMENT DES IMAGES VIA CAROUSSELLE
-            ------------------------------------------------->
-
-            <div
-                id="carousel{{situationDetails.id}}" class="carousel slide" data-ride="carousel">
+            <!-- Traitement du carousel -->
+            <div id="carousel{{situationDetails.id}}" class="carousel slide" data-ride="carousel">
 
                 <!-- Indicators -->
                 {% if situationDetails.pictures|length > 1  %}
@@ -113,14 +105,10 @@
 
 {% else %}
 
-    <!-----------------------------------------------
-    |            DESCRIPTION UTILISATEUR
-    ------------------------------------------------->
-
     <!-- Affichage de la description utilisateur si pas sur les situations -->
         <div class="row"> {% if user is defined and user is not null %}
 
-            <div class="col-lg-12 col-12 text-center" id="user_username">
+            <div class="col-12 text-center" id="user_username">
                 Profil de :
                 {{ user.username | striptags | nl2br }}
             </div>
@@ -128,11 +116,11 @@
             <br><br>
 
             {% if user.description is not null or user.description is not empty %}
-                <div class="col-lg-12 col-12 user_description">
+                <div class="col-12 user_description">
                     {{ user.description | raw | nl2br }}
                 </div>
             {% else %}
-                <div class="col-lg-12 col-12 text-center user_description">
+                <div class="col-12 text-center user_description">
                     Aucune description disponible sur le profil de
                     {{ user.username | striptags | nl2br }}
                 </div>
@@ -142,7 +130,3 @@
     </div>
 
 {% endif %}
-
-<script>
-    {{include("Templates/Javascript/userSituationDetails.js")}}
-</script>

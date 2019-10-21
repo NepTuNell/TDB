@@ -38,7 +38,9 @@
     {% endif %}
 </div>
 
-<script>
-    {{ include('User/Javascript/index.js') }}
-</script>
+{% endblock %}
+
+{% block javascripts %}
+    {{include('User/Javascript/index.js')}}
+    {{include("Templates/Javascript/userSituationDetails.js")}}
 {% endblock %}

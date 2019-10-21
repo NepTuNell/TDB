@@ -2,10 +2,10 @@
 
 {% block body %}
     
-<div class="row">
+<div class="row page_content">
         
-    <div class="offset-4 col-4 offset-4 page_content">  
-        <h1 class="col-12 text-center">Se connecter</h1>
+    <div class="offset-lg-4 col-lg-4 offset-lg-4 offset-1 col-10 offset-1">  
+        <h1 class="col-12 text-center" style="margin-top: 15%; margin-bottom: 15%">Se connecter</h1>
         <form action="{{ path('login') }}" method="post">
             <div class="form-group row">    
                 <label class="col-4" for="username">Adresse Email :</label>
@@ -28,7 +28,8 @@
             </div>
         </form>
         
-        
+        <!-- Erreur spécifique -->
+
         {% if error is defined and error is not null%}
             <div class="col-12">
                 <div class="row alert alert-danger">

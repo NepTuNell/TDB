@@ -7,10 +7,11 @@
 
             <h2 class="col-12 text-center">Modification de la situation</h2>
 
+            {{ include('Templates/Error/flash.html.twig') }}
+            
             <div class="form-group">
 
-                {{ form_start(form, {'action': path('situation_details_edit', {'id': situationDetail.id}), 'method': 'post', 'attr': {'novalidate': 'novalidate'}})
-                            }}
+                {{ form_start(form, {'action': path('situation_details_edit', {'id': situationDetail.id}), 'method': 'post', 'attr': {'novalidate': 'novalidate'}})}}
 
                 <div class="form-group row">
                     {{ form_label(form.competences, 'Compétences mises en oeuvre', {'label_attr': {'class': 'col-12'} }) }}
@@ -50,15 +51,9 @@
 
                 {{ form_end(form) }}
 
-                <div>
-                    <button class="btn btn-primary" onclick="window.location.href='{{path('situation_details_show', {'user' : situationDetail.situation.user.id, 'situation': situationDetail.situation.id})}}'">Retour</button>
-                </div>
-
             </div>
         </div>
 
-
-        {{ include('Templates/Error/flash.html.twig') }}
         {{ include('Templates/Error/message.html.twig') }}
         {{ include('Templates/Error/error.html.twig') }}
 

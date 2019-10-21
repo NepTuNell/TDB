@@ -172,7 +172,7 @@ class SituationDetails
      */
     public function addPicture(\SioBundle\Entity\Picture $picture)
     {
-        $this->pictures->add($picture);
+        $this->pictures[] = $picture;
 
         return $this;
     }

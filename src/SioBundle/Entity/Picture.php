@@ -16,6 +16,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class Picture
 {
+
+    /**************************************
+     *              ATTRIBUTS
+     *************************************/
+
     /**
      * @var int
      *
@@ -70,7 +75,10 @@ class Picture
      */
     private   $tempFile;
     
-   
+    /**************************************
+     *              METHODES
+     *************************************/
+
     /**
      * Set referentielDetails
      *
@@ -104,11 +112,9 @@ class Picture
     {
         return $this->id;
     }
-    
+
     /**
-     * Get url
-     *
-     * @return string
+     * 
      */
     public function getUrl()
     {
@@ -125,6 +131,12 @@ class Picture
         return $this->alt;
     }    
     
+    
+
+    /**************************************
+     * GESTION DES FICHIERS VIA UPLOAD
+     **************************************/
+    
     /**
      * Get tempfile
      *
@@ -134,41 +146,33 @@ class Picture
     {
         return $this->tempFile;
     }
-    
+
+    /**
+     * Get Picture
+     */
     public function getPicture()
     {
         return $this->picture;
     }
     
-   
-    /**************************************
-     * GESTION DES FICHIERS VIA UPLOAD
-     **************************************/
-    
+    /**
+     * Set Picture
+     */
     public function setPicture(UploadedFile $picture = null)
     {
          
         $this->picture = $picture; 
-        
-        // Si jamais il n'y a pas de fichier (champ facultatif), on ne fait rien
-        if (null !== $this->url) {
-            
-            $this->tempFile = $this->url;
-            $root = $this->getUploadRootDir().'/'.$this->getId().".".$this->getTempFile();
-            
-            if(file_exists($root) ) {
-                
-                unlink($root);
 
-            }
-            
+        if ( null !== $this->url ) {
+
+            $this->tempFile = $this->getFileName();
             $this->url = null;
             $this->alt = null;
 
         }
         
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -176,14 +180,14 @@ class Picture
     public function preUpload () 
     {
         
-        if(null === $this->picture) {
-            
+        if( null === $this->getPicture() ) {
+              
             return;
             
-        }
+        } 
         
-        $this->url = $this->picture->guessExtension(); // On sauvegarde le nom de fichier dans notre attribut $url
-        $this->alt = $this->picture->getClientOriginalName(); // On crée également le futur attribut alt de notre balise <img>
+        $this->url = $this->picture->guessExtension();  
+        $this->alt = strstr($this->picture->getClientOriginalName(), '.', true);  
             
     }
     
@@ -193,21 +197,32 @@ class Picture
      */
     public function upload () 
     {
- 
-        $this->picture->move($this->getUploadRootDir(), $this->getId().".".$this->getUrl()); // On déplace le fichier envoyé dans le répertoire de notre choix
+        
+        if( null !== $this->url ) {
+
+            $root = $this->getUploadRootDir().'/'.$this->getTempFile();
+                
+            if( file_exists($root) ) {
+                    
+                unlink($root);
+
+            }
+
+        }
+
+        $this->picture->move($this->getUploadRootDir(), $this->getFileName()); 
         
     }
-    
+
     /**
      * @ORM\PreRemove()
      */
     public function preRemove () 
     {
         
-        $this->tempFile = $this->getUploadRootDir()."/".$this->getId().".".$this->getUrl();
+        $this->tempFile = $this->getUploadRootDir()."/".$this->getFileName();
         
     }
-    
     
     /**
      * @ORM\PostRemove()
@@ -215,9 +230,9 @@ class Picture
     public function remove () 
     {
         
-        if (file_exists($this->tempFile)) {
+        if ( file_exists($this->getTempFile()) ) {
 
-            unlink($this->tempFile);
+            unlink($this->getTempFile());
 
         }
         
@@ -241,10 +256,13 @@ class Picture
 
     }
     
+    /**
+     * Getter du nom complet du fichier uploadé
+     */
     public function getFileName()
     {
         
-        return $this->getId().".".$this->getUrl();
+        return $this->getAlt()."_".$this->getId().".".$this->getUrl();
         
     }
     

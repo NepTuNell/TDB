@@ -74,18 +74,18 @@
                     </tr>
                 {% endfor %}
             </table>
+
+            {{ include('Templates/Error/message.html.twig') }}
         </div>
         <!-- Visualisation de la compétence -->
         <div id="modalDashboard" class="text-center row">
-        <div class="offset-11 col-1">
-            <i class="far fa-window-close modalDashboardClose" onclick="dashboardModelClose()"></i>
-        </div>
-            
-            <span class="col-12" id="modalDashboardText"></span>
+            <div class="offset-11 col-1">
+                <i class="far fa-window-close modalDashboardClose" onclick="dashboardModelClose()"></i>
+            </div>
+                
+                <span class="col-12" id="modalDashboardText"></span>
         </div>
     {% endif %}
-    
-    {{ include('Templates/Error/message.html.twig') }}
 
     <script>
         {{ include('User/Javascript/dashboard.js') }}

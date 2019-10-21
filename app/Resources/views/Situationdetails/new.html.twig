@@ -7,43 +7,38 @@
 
             <h2 class="col-12 text-center">Nouveau descriptif</h2>
 
+            {{ include('Templates/Error/flash.html.twig') }}
+            
             <div class="form-group">
 
-                {{ form_start(form, {'action': path('situation_details_new', {'situation': situation.id}), 'method': 'post', 'attr': {'novalidate': 'novalidate'}})
-                            }}
+                {{ form_start(form, {'action': path('situation_details_new', {'situation': situation.id}), 'method': 'post', 'attr': {'novalidate': 'novalidate'}})}}
 
-                <div class="form-group row">
-                    {{ form_label(form.competences, 'Compétences mises en oeuvre', {'label_attr': {'class': 'col-12'} }) }}
-                    {{ form_widget(form.competences, {'attr': {'class': 'form-control col-12'} }) }}
-                </div>
-
-                <div class="form-group row">
-                    {{ form_label(form.description, 'Desciption de la situation', {'label_attr': {'class': 'col-12'} }) }}
-                    {{ form_widget(form.description, {'attr': {'class': 'form-control col-12'} }) }}
-                </div>
-
-                <table class="table col-12">
-                    <tbody class="pictures" data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}"></tbody>
-                </table>
-
-                <div class="form-group row" style="margin-top: 2%;">
-                    <div class="col-2">
-                        <input class="btn btn-primary" type="submit" value="Valider"/>
+                    <div class="form-group row">
+                        {{ form_label(form.competences, 'Compétences mises en oeuvre', {'label_attr': {'class': 'col-12'} }) }}
+                        {{ form_widget(form.competences, {'attr': {'class': 'form-control col-12'} }) }}
                     </div>
-                </div>
+
+                    <div class="form-group row">
+                        {{ form_label(form.description, 'Desciption de la situation', {'label_attr': {'class': 'col-12'} }) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control col-12'} }) }}
+                    </div>
+
+                    <table class="table col-12">
+                        <tbody class="pictures" data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}"></tbody>
+                    </table>
+
+                    <div class="form-group row" style="margin-top: 2%;">
+                        <div class="col-2">
+                            <input class="btn btn-primary" type="submit" value="Valider"/>
+                        </div>
+                    </div>
 
                 {{ form_end(form) }}
 
             </div>
 
-            <div>
-                <button class="btn btn-primary" onclick="window.location.href='{{ path('situation_details_show', {'user' : situation.user.id, 'situation': situation.id}) }}'">Retour
-                </button>
-            </div>
-
         </div>
 
-        {{ include('Templates/Error/flash.html.twig') }}
         {{ include('Templates/Error/error.html.twig') }}
         {{ include('Templates/Error/message.html.twig') }}
 

@@ -98,11 +98,27 @@ class SituationDetailsController extends Controller
                     
                 }
                 
-                $situationDetails->setValidated(false);
+                if ( $this->isGranted('ROLE_ADMIN') ) {
+
+                    $this->addFlash('success', 'Descriptif mis à jour !');
+                    $situationDetails->setValidated(true);
+
+                } else {
+
+                    $this->addFlash('success', 'Votre descriptif à bien été enregistré. Un administrateur le validera sous 24 heures !');
+                    $situationDetails->setValidated(false);
+
+                }
+
                 $this->manager->persist($situationDetails);
                 $this->manager->flush();
 
-                $this->addFlash('success', 'Votre descriptif à bien été enregistré. Un administrateur le validera sous 24 heures !');
+                /**
+                 * Actualisation de l'entité et du formulaire
+                 */
+                $this->manager->refresh($situationDetails);
+                $form = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
+
                 return $this->render('Situationdetails/new.html.twig', array(
                     'situation'  => $situation,
                     'form'       => $form->createView(),
@@ -162,13 +178,24 @@ class SituationDetailsController extends Controller
                     
                 }
 
-                foreach ($situationDetails->getPictures() as $picture) {
+                /*foreach ($situationDetails->getPictures() as $picture) {
                     
                     $picture->setSituationDetails($situationDetails);
                     
-                }
+                }*/
                 
-                $situationDetails->setValidated(false);
+                if ( $this->isGranted('ROLE_ADMIN') ) {
+
+                    $this->addFlash('success', 'Descriptif mis à jour !');
+                    $situationDetails->setValidated(true);
+
+                } else {
+
+                    $this->addFlash('success', 'Votre descriptif à bien été enregistré. Un administrateur le validera sous 24 heures !');
+                    $situationDetails->setValidated(false);
+
+                }
+           
                 $this->manager->persist($situationDetails);
                 $this->manager->flush();
 
@@ -177,8 +204,10 @@ class SituationDetailsController extends Controller
                  */
                 $this->manager->refresh($situationDetails);
                 $form = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
-
-                $this->addFlash('success', 'Votre descriptif à bien été enregistré. Un administrateur le validera sous 24 heures !');
+                /*foreach($situationDetails->getPictures() as $picture) {
+                    var_dump($picture->getFileName());
+                }*/
+                
                 return $this->render('Situationdetails/edit.html.twig', array(
                     'form' => $form->createView(),
                     'situationDetail' => $situationDetails
