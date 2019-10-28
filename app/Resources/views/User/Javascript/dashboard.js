@@ -8,13 +8,17 @@ var winDashText = document.getElementById("modalDashboardText");
 var tableDashboard = document.getElementById("table");
 
 /**
- * Parcours du tableau dashboard et interaction clique sur cellule
+ * Parcours du tableau dashboard et interaction clique sur cellule et survol
  */
-tableDashboard.onclick = function () {
-        
+tableDashboard.onmouseenter = function () {
+       
         for (var i = 1; i < tableDashboard.rows.length; i++) {
+
                 for (var j = 0; j < tableDashboard.rows[i].cells.length; j++) {
 
+                        /**
+                         * Clique sur cellule affichage fenêtre
+                         */
                         tableDashboard.rows[i].cells[j].onclick = function () {
 
                                 index = this.cellIndex;
@@ -34,8 +38,49 @@ tableDashboard.onclick = function () {
 
                         };
 
+                        /**
+                         * Survole de la cellule changement du curseur
+                         */
+                        tableDashboard.rows[i].cells[j].onmouseover = function () {
+
+                                index = this.cellIndex;
+                                row = this.parentElement.rowIndex;
+
+                                if (tableDashboard.rows[row].cells[index].textContent == "X") {
+
+                                        document.getElementsByTagName('body')[0].style.cursor = "pointer";                                       
+        
+                                } else {
+        
+                                        document.getElementsByTagName('body')[0].style.cursor = "default";
+        
+                                }
+        
+
+                        };
+
+                        /**
+                         * Sorti d'une cellule
+                         */
+                        tableDashboard.rows[i].cells[j].onmouseleave = function () {
+
+                                document.getElementsByTagName('body')[0].style.cursor = "default";
+
+                        };
+                        
                 }
+
         }
+
+}
+
+/**
+ * Sorti du tableau  
+ */
+tableDashboard.onmouseleave = function () {
+
+        document.getElementsByTagName('body')[0].style.cursor = "default";
+
 }
 
 /**
@@ -48,3 +93,5 @@ function dashboardModelClose()
         winDash.style.display = "none";
 
 }
+
+ 

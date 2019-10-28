@@ -583,8 +583,15 @@ i  {
     //              TABLEAU DE BORD              //
     /////////////////////////////////////////////*/
 
-    #page_table_dashboard {
+    #page_dashboard {
         max-height: 88vh;
+        overflow: auto;
+    }
+
+    #table_dashboard {
+        margin-top : 2%;
+        margin-bottom: 2%;
+        max-height: 80vh;
         overflow: auto;
     }
 

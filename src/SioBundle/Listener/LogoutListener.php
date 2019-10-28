@@ -33,8 +33,6 @@ class LogoutListener implements LogoutHandlerInterface
     public function logout(Request $request, Response $response, TokenInterface $token)
     {
         
-         
-        
     }
     
 }

@@ -163,7 +163,7 @@ class Picture
          
         $this->picture = $picture; 
 
-        if ( null !== $this->url ) {
+        if ( null !== $this->getUrl() ) {
 
             $this->tempFile = $this->getFileName();
             $this->url = null;
@@ -198,7 +198,7 @@ class Picture
     public function upload () 
     {
         
-        if( null !== $this->url ) {
+        if( null !== $this->getTempFile() ) {
 
             $root = $this->getUploadRootDir().'/'.$this->getTempFile();
                 
