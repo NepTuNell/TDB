@@ -178,11 +178,11 @@ class SituationDetailsController extends Controller
                     
                 }
 
-                /*foreach ($situationDetails->getPictures() as $picture) {
+                foreach ($situationDetails->getPictures() as $picture) {
                     
                     $picture->setSituationDetails($situationDetails);
                     
-                }*/
+                }
                 
                 if ( $this->isGranted('ROLE_ADMIN') ) {
 
