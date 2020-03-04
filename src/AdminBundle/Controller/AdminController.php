@@ -57,7 +57,6 @@ class AdminController extends Controller
      *          METHODES
      ******************************/
 
-
     /**
      * Undocumented function
      *

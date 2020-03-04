@@ -204,10 +204,7 @@ class SituationDetailsController extends Controller
                  */
                 $this->manager->refresh($situationDetails);
                 $form = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
-                /*foreach($situationDetails->getPictures() as $picture) {
-                    var_dump($picture->getFileName());
-                }*/
-                
+              
                 return $this->render('Situationdetails/edit.html.twig', array(
                     'form' => $form->createView(),
                     'situationDetail' => $situationDetails

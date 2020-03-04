@@ -16,6 +16,7 @@ use AdminBundle\Entity\Referentiel;
 use SioBundle\Entity\SituationDetails;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -257,7 +258,9 @@ class UserController extends Controller
         
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $form = $this->createFormBuilder($user)
-                     ->add('description')
+                     ->add('description', CKEditorType::class, [
+                        'config_name' => 'my_config',
+                     ])
                      ->getForm();
         
         $form->handleRequest($request);
@@ -285,6 +288,7 @@ class UserController extends Controller
         return $this->render('User/Profile/editDescription.html.twig', [
             'form'  => $form->createView(),
         ]);
+        
     }
     
     

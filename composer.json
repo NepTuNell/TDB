@@ -57,6 +57,7 @@
         "post-update-cmd": [
             "@symfony-scripts"
         ]
+
     },
     "config": {
         "sort-packages": true

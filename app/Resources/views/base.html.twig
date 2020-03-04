@@ -1,43 +1,29 @@
 <!DOCTYPE HTML>
     <html>
+
         <head> 
             <meta charset="utf-8"/>
             <html lang="fr">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            
+            <title>Mon tableau de bord</title>
+
             <!-- Bibliothèques Jquery -->
             <script src="{{ asset('js/jquery.js') }}"></script>
             
-            <!-- Fichiers Bootstrap et css personnel -->
-            <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"/>
+            <!-- Bibliothèques Boostrap-->
             <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+            <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"/>
             
             <!-- Lien icone font awesome et CSS personnel -->
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
             <link href="{{ asset('css/TDB.css') }}" rel="stylesheet"/>
-            
-            <!-- Plugin TinyMCE -->
-            <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
-            <script>
-                tinymce.init({
-                    selector:'textarea',
-                    width: '100%',
-                    height: 500,
-                    branding: false,
-                    mode: 'exact',
-                    keep_styles : false
-                });
-            </script>
             
             <!-- FOS Routing Bundle -->
             <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
             <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
             
             <!-- development version, includes helpful console warnings -->
-            <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-           
-            <!-- Titre -->
-            <title>PCP</title>
+            <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>        
 	    </head>
         
 	    <body>
@@ -98,16 +84,15 @@
             </div>        
 	    </body>
 
+        <!-- Chargement des fonctions javascript personnelles si l'utilisateur est connecté -->
         {% if app.user %}
-            <script> 
+            <script>  
                 {{include('Javascript/baseJS.js')}}
-            </script>
-            <script>
                 {% block javascripts %}
-                    
-                {% endblock %} 
+
+                {% endblock %}
             </script>
         {% endif %}
-        
+
     </html>
   

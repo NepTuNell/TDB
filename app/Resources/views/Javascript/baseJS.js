@@ -1,6 +1,8 @@
-//////////////////////////////////////////////
-//      TRAITEMENT DE LA FENETRE MODALE     //
-//////////////////////////////////////////////
+
+
+/**********************************************************
+ *           Traitement collision fenêtre modale
+ **********************************************************/
 var imgMod = document.getElementById("modalImage");
 var winMod = document.getElementById("modalWindow");
 

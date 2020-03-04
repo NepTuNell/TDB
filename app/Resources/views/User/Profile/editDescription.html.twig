@@ -8,9 +8,9 @@
             
         <div class="col-10 page_content"> 
             <h2 class="col-12 text-center" >Mon entreprise</h2>
-            <div class="form-group col-12"> 
+            <div class="form-group"> 
                 {{ form_start(form, {'action': path('user_edit_description'), 'method': 'post', 'attr': {'novalidate': 'novalidate'}}) }}
-                    <div class="form-group row">
+                    <div class="form-group col-12">
                         {{ form_widget(form.description) }}
                     </div>
                     {{ include('Templates/Profile/Button/buttonModify.html.twig') }} 

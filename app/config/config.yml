@@ -37,6 +37,10 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form_themes: 
+        - 'bootstrap_4_layout.html.twig'
+        - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+    
 
 # Doctrine Configuration
 doctrine:
@@ -73,5 +77,16 @@ sensio_framework_extra:
 
 fos_js_routing:
     routes_to_expose: [ user_show ] 
+
+fos_ck_editor:
+    default_config: my_config
+    configs:
+        my_config:
+            toolbar: 'my_toolbar'
+            autoload: true
+            skin: "office2013,/jimmy/TDB/web/bundles/fosckeditor/skins/office2013/"
+    toolbars:
+        configs:
+            my_toolbar: [ ['Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat'], [ "Anchor" ], ['TextColor', 'BGColor'], ['Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'], ['NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl'], [ "Maximize" ] ]
     
-        
+           
