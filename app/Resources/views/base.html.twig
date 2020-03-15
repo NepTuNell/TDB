@@ -85,14 +85,13 @@
 	    </body>
 
         <!-- Chargement des fonctions javascript personnelles si l'utilisateur est connecté -->
-        {% if app.user %}
-            <script>  
-                {{include('Javascript/baseJS.js')}}
-                {% block javascripts %}
 
-                {% endblock %}
-            </script>
-        {% endif %}
+        <script>  
+            {{include('Javascript/baseJS.js')}}
+            {% block javascripts %}
+
+            {% endblock %}
+        </script>
 
     </html>
   

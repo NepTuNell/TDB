@@ -2,16 +2,21 @@
 
 namespace AdminBundle\Controller;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use SioBundle\Entity\SituationDetails;
-use SioBundle\Entity\Situation;
+use DateTime;
 use SioBundle\Entity\User;
+use SioBundle\Entity\Picture;
+use AdminBundle\Entity\Backup;
 use SioBundle\Services\Mailer;
+use SioBundle\Entity\Situation;
+use SioBundle\Entity\SituationDetails;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @Route("admin")
@@ -326,6 +331,133 @@ class AdminController extends Controller
         
         return $this->redirectToRoute('admin_view_accounts');
         
+    }
+
+    /**
+     * @Route("/backup/bdd/list", name="admin_backup_restaure")
+     * @Method({"GET", "POST"})
+     */
+    function bddBackUpList(Request $request)
+    {
+        if ( !$this->isGranted('ROLE_ADMIN') ) {
+            throw $this->createAccessDeniedException('Vous essayer d\'accéder à des ressources protégées !');
+        }
+        
+        $backupUseByForm = new Backup;
+        $backupList = $this->manager->getRepository(Backup::class)->fetchAllBackup();
+        $form = $this->createForm('AdminBundle\Form\BackupType', $backupUseByForm);
+       
+        $form->handleRequest($request);
+
+        if ( "POST" === $request->getMethod() ) {
+
+            if ( $form->isSubmitted() && $form->isValid() ) {
+                
+                $libelle = $form->get('backups')->getData()->getLibelle();
+           
+                // Restauration du nom des backups dans la bdd
+                $backupsPath = "/home/jimmy/html/TDB/web/backup/BDD/";
+                $backupsList = scandir($backupsPath);
+                
+                $picturesPath = "/home/jimmy/html/TDB/web/backup/images/";
+                $picturesList = scandir($picturesPath);
+
+                if ( null !== $libelle && "" !== $libelle ) {
+
+                    exec('mysql -ujimmy -p2018 jimmy_tdb < /home/jimmy/html/TDB/web/backup/BDD/'.$libelle);
+                    $this->addFlash('success', 'La base de donnée a été restaurée !');
+
+                    // Restauration des backups existant dans la base de données
+                    foreach ( $backupsList as $file ) {
+
+                        $result = $this->manager->getRepository(Backup::class)->fetchBackup($file);
+                        
+                        if ( 1 !== $result && "." !== $file && ".." !== $file ) {
+                            $date = new DateTime(substr($file, 7, 10));
+                            $backup = new Backup();
+                            $backup->setLibelle($file);
+                            $backup->setDate($date);
+                            $this->manager->persist($backup);
+                            $this->manager->flush();
+                        }
+                    
+                    }
+
+                    // Restauration des images dans le dossier public img
+                    foreach ( $picturesList as $picture ) {
+
+                        // Nom de l'image
+                        $pos1 = strripos($picture, '.');
+                        $name = substr($picture, 0, $pos1);
+                        $ext  = substr($picture, $pos1);
+                        
+                        // Id de l'image
+                        $pos2  = strripos($name, '_')+1;
+                        $id    = substr($name, $pos2);
+
+                        // Lecture de l'image dans la base de donnée
+                        $imgExist = $this->manager->getRepository(Picture::class)->find($id);
+                        
+                        // Si elle existe j'utilise rsync vers le répertoire des images affichées (pour être sûr de son existence)
+                        if ( null !== $imgExist ) {
+                            exec('rsync /home/jimmy/html/TDB/web/backup/images/"'.$name.$ext.'" /home/jimmy/html/TDB/web/uploads/img/"'.$name.$ext.'"');
+                        }
+
+                    }
+
+                    $form = $this->createForm('AdminBundle\Form\BackupType', $backupUseByForm);
+
+                }
+                
+            }
+
+            $errors = $this->get('validator')->validate($backupUseByForm);
+
+        }
+
+        return $this->render('Admin/backup.html.twig', [
+            'form'   =>  $form->createView(),
+        ]);
+
+    }
+
+    /**
+     * @Route("/backup/bdd/create", name="admin_backup_bdd")
+     * @Method({"GET", "POST"})
+     */
+    function dump_MySQL()
+    {
+
+        if ( !$this->isGranted('ROLE_ADMIN') ) {
+            throw $this->createAccessDeniedException('Vous essayer d\'accéder à des ressources protégées !');
+        }
+
+        sleep(1);
+        $date  = new DateTime();
+
+        do {
+            $libelle = "backup_".$date->format('d-m-Y').'_'.$date->getTimestamp();
+            $backupExist = $this->manager->getRepository(Backup::class)->findOneBy([
+                'libelle'   => $libelle.'.sql'
+            ]);
+        } while ( null !== $backupExist );
+
+        $libelle .= '.sql';
+        $backup = new Backup;
+        $backup->setLibelle($libelle);
+        $backup->setDate($date);
+        
+        // Création backup BDD
+        exec('mysqldump -ujimmy -p2018 --databases jimmy_tdb > /home/jimmy/html/TDB/web/backup/BDD/'.$libelle);
+
+        // Backup des images
+        exec('rsync -r /home/jimmy/html/TDB/web/uploads/img/ /home/jimmy/html/TDB/web/backup/images/');
+
+        $this->manager->persist($backup);
+        $this->manager->flush();
+
+        return $this->redirectToRoute('admin_backup_restaure');
+
     }
     
 }

@@ -76,6 +76,19 @@ body {
     cursor: pointer;
 }
 
+/**
+ * Infobulle sur page de connexion
+ */
+ .popup {
+    display: none;
+    color: #4da0cd;
+    background-color: #012131;
+    padding: 15px;
+    border-radius: 3px;
+    box-shadow:0 0 2px rgba(0,0,0,.5);
+    font-size: 0.8em;
+}
+
 /*///////////////////////////////////////////
 //          FENETRE MODALE DASHBOARD       //
 ///////////////////////////////////////////*/
@@ -501,7 +514,7 @@ i  {
 
     .modal {
         display: none;
-        background-color: rgba(88, 80, 80, 0.5);
+        background-color: rgba(88, 80, 80, 0.9);
         color: white;
         border-radius:3px;
         box-shadow:0 0 2px rgba(0,0,0,.5);
@@ -584,6 +597,16 @@ i  {
     #table_admin tr td {
         height: 4vw;
         vertical-align: middle;
+    }
+
+    .backupContainer {
+        background-color: transparent;
+        border-style: none;
+        border-style: solid;
+        padding-left: 5%;
+        min-height: auto;
+        max-height: 50vh;
+        overflow-y: scroll;
     }
 
     /*/////////////////////////////////////////////

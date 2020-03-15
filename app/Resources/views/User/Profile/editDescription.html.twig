@@ -13,7 +13,11 @@
                     <div class="form-group col-12">
                         {{ form_widget(form.description) }}
                     </div>
-                    {{ include('Templates/Profile/Button/buttonModify.html.twig') }} 
+                    <div class="form-group row">
+                        <div class="col-lg-1 col-3">
+                            <input class="btn btn-primary button-size" type="submit" value="Modifier"/>
+                        </div>
+                    </div>    
                 {{ form_end(form) }}
             </div>
         </div> 

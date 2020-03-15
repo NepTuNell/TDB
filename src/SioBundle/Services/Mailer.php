@@ -169,4 +169,46 @@ class Mailer extends Controller
 
     }
 
+     /**
+     * Undocumented function
+     *
+     * @param User $user
+     * @return void
+     */
+    public function resetPasswordCheckAccount(User $user)
+    {
+
+        $message =  \Swift_Message::newInstance()
+                        ->setSubject('Hello Email')
+                        ->setFrom('sauronlemaudit@gmail.com')
+                        ->setTo(''.$user->getEmail())
+                        ->setBody($this->templating->render('Templates\Email\reset.html.twig', [
+                            'user'  => $user
+                        ]), 
+                        'text/html'
+                    );     
+
+        $this->mailer->send($message); 
+
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param User $user
+     * @return void
+     */
+    public function resetPassword(User $user, $password)
+    {
+
+        $message =  \Swift_Message::newInstance()
+                    ->setSubject('Hello Email')
+                    ->setFrom('sauronlemaudit@gmail.com')
+                    ->setTo(''.$user->getEmail())
+                    ->setBody('Votre mot de passe a été réinitialisé ! Votre nouveau mot de passe est : '.$password.' . Veuillez le modifier dès que possible.');
+                         
+        $this->mailer->send($message); 
+
+    }
+
 }

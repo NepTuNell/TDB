@@ -1,7 +1,7 @@
 
 <!-- Message d'erreur spécifique -->
 
-{% if message is defined and message is not null %}
+{% if message is defined and message is not null and message|length >  0 %}
     <div class="offset-1 col-10 offset-1">
         <div class="row alert alert-danger" style="margin-top: 5%">
             {% for error in message %}
@@ -12,5 +12,4 @@
         </div>
     </div>
 {% endif %}
-                
 
