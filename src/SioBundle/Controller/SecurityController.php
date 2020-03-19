@@ -6,6 +6,7 @@ use SioBundle\Entity\User;
 use SioBundle\Services\Mailer;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -260,4 +261,26 @@ class SecurityController extends Controller
 
     }
     
+    /**
+     * @Route("/user/connected/check", options={"expose" = true}, name="user_check_connected", methods={"POST"})
+     */
+    public function isConnected()
+    {
+
+        if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+            $connected = 0;
+        } else {
+            $connected = 1;
+        }
+
+        $response = new Response(
+
+            $connected
+            
+        );
+         
+        return $response;
+
+    }
+
 }

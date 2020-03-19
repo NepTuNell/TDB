@@ -6,7 +6,7 @@
 var $collectionHolder;
 var $newLink = $('<button id="btnImg" type="button" class="btn btn-secondary button-size add_tag_link" style="margin-top: 1%; margin-bottom: 5%;"><i class="fas fa-plus"></i>image</button>');
 
-jQuery(document).ready(function () {
+$(document).ready(function () {
 
     $collectionHolder = $('tbody.pictures');
     $collectionHolder.append($newLink);
@@ -21,7 +21,7 @@ jQuery(document).ready(function () {
 });
 
 function addTagForm($collectionHolder, $newLinkLi) {
-
+    
     var buttonImg = document.getElementById("btnImg");
     var compteur = document.getElementsByTagName('tbody');
 
@@ -41,7 +41,7 @@ function addTagForm($collectionHolder, $newLinkLi) {
     var newForm = prototype;
 
     newForm = newForm.replace(/__name__/g, index);
-
+    console.log(newForm)
     $collectionHolder.data('index', index + 1);
 
     var $newFormLi = $("<tr><td class=\"col-6\">Nouvelle image</td><td class=\"col-4\">" + newForm + "</td></tr>");

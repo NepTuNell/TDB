@@ -68,131 +68,66 @@ $(document).ready(function () {
 
     }
 
-    ////////////////////////////////////////
-    //      CONFIRMATION SUPPRESSION      //
-    //////////////////////////////////////// 
+});
 
-    function deleteRefDetails() {
+ 
+////////////////////////////////////////
+//      CONFIRMATION SUPPRESSION      //
+//////////////////////////////////////// 
 
-        if (!window.confirm("Voulez-vous réellement supprimer cet élément ?")) {
+function deleteRefDetails() {
 
-            return false;
+    if (!window.confirm("Voulez-vous réellement supprimer cet élément ?")) {
 
-        } else {
+        return false;
 
-            return true;
+    } else {
 
-        }
+        return true;
 
     }
 
-    //////////////////////////////////////////////////
-    //        GESTION DU CHARGEMENT DES PAGES       //
-    //////////////////////////////////////////////////
+}
 
-    window.addEventListener("load", function clean() {
+//////////////////////////////////////////////////
+//      VISUALISATION DES POSTS UTILISATEUR     //
+//////////////////////////////////////////////////
 
-        // Suppression des éléments dynamiques lors d'un chargement
+function viewFullPost(user, situation) {
 
-        var userNav = document.getElementById('userNav');
+    checkConnected().then(view, disconnected);
 
-        /*
-        * Test si l'élément contenant les utilisateurs existe, si non fin de la fonction
-        */
-        if (null !== userNav) {
+    function view () {
 
-            showUser();
-
-        }
-
-        // Suppression des éléments dynamiques lors d'un chargement
-
-        var divPictures = document.getElementById('siobundle_situationdetails_pictures');
-
-        /*
-        * Test si l'élément contenant les images lors de la création d'une tâche existe, 
-        * si oui suppression de toutes les images au rechargement de la page 
-        */
-        if (divPictures !== null) {
-
-            while (divPictures.firstChild) {
-
-                divPictures.removeChild(divPictures.firstChild);
-
-            }
-
-        }
-
-    });
-
-
-    ////////////////////////////////////////////////
-    //        MISE A JOUR AFFICHAGE USERS         
-    ////////////////////////////////////////////////
-
-    function showUser() {
-
-        /*
-        * Déclaration des variables locales à la fonction
-        */
-        var userNav = document.getElementById('user_navigation');
-        var url = Routing.generate('users_list');
         var httpRequest = new XMLHttpRequest();
 
-        /*
-        * Test si l'objet XMLHttpRequest a bien été instancié, si non fin de la fonction
-        */
         if (!httpRequest) {
-
-            alert('Impossible de créer une instance de XMLHTTP');
-            return false;
-
-        } else {
-
-            httpRequest.responseType = 'text'; // Type de retour attendu
-
+                alert('Impossible de créer une instance de XMLHTTP');
+                return false;
         }
+
+        httpRequest.responseType = 'text';
+        var url = Routing.generate('situation_details_show', { 'user': user, 'situation': situation });
+        var page = document.getElementById("main_page");
 
         httpRequest.onreadystatechange = function () {
 
-            if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status === 200 || httpRequest.status === 0)) {
+                if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status === 200 || httpRequest.status === 0)) {
 
-                var data = JSON.parse(httpRequest.responseText);
-                var users = data[0];
+                        document.getElementsByTagName("body")[0].style.cursor = "default";
+                        var data = httpRequest.responseText;
+                        page.innerHTML = data;
 
-                userNav.innerHTML = "";
-                userNav.innerHTML += "<div class=\"row justify-content-around\">\n\
-                                                <h5 class=\"user_nav_lib\">Utilisateurs</h5>\n\
-                                            </div>"
+                } else if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status !== 200 || httpRequest.status !== 0)) {
 
-                for (var i = 0; i < users.length; i++) {
+                        alert("Erreur de chargement des données !");
+                        return false;
 
-                    document.getElementsByTagName("body")[0].style.cursor = "default";
-                    var url = Routing.generate('user_show', { 'id': users[i].id });
-                    var color = (users[i].roles[0] === "ROLE_ADMIN" ? "rgba(17, 135, 165, 0.4)" : "rgba(155, 155, 153, 0.1)");
+                } else {
 
-                    userNav.innerHTML += "<div class=\"row justify-content-around\">\n\
-                                                        <div class =\"col-10 user_nav_li text-center\" style=\"background-color: "+ color + "\">\n\
-                                                            <li>\n\
-                                                                <a href=\""+ url + "\">\n\
-                                                                    "+ users[i].username + "\n\
-                                                                </a>\n\
-                                                            </li>\n\
-                                                        </div>\n\
-                                                </div>";
+                        document.getElementsByTagName("body")[0].style.cursor = "wait";
 
                 }
-
-            } else if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status !== 200 || httpRequest.status !== 0)) {
-
-                alert("Erreur de chargement des données !");
-                return false;
-
-            } else {
-
-                    document.getElementsByTagName("body")[0].style.cursor = "wait";
-
-            }
 
         }
 
@@ -201,7 +136,175 @@ $(document).ready(function () {
 
     }
 
-    // Appel des fonctions à un temps donné
-    //var printTime = setInterval(printTime, 1000);
+    function disconnected () {
 
-});
+        alert('Vous avez été déconnecté(e) !');
+        document.location.reload(true);
+
+    }
+
+}
+
+/////////////////////////////////////////////////
+//      SUPPRESSION D'UN POST UTILISATEUR      //
+/////////////////////////////////////////////////
+
+function deletePost(user, situation, situationDetails) {
+
+    checkConnected().then(deletePost, disconnected);
+    
+    function deletePost () {
+
+        if ( deleteRefDetails() ) {
+
+                var httpRequest = new XMLHttpRequest();
+
+                if (!httpRequest) {
+                        alert('Impossible de créer une instance de XMLHTTP');
+                        return false;
+                }
+
+                httpRequest.responseType = 'text';
+                var url = Routing.generate('situation_details_delete', { 'id': situationDetails });
+
+                httpRequest.onreadystatechange = function () {
+
+                        if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status === 200 || httpRequest.status === 0)) {
+
+                                document.getElementsByTagName("body")[0].style.cursor = "default";
+                                var tryDelete = JSON.parse(httpRequest.responseText);
+
+                                if (tryDelete != "Ok") {
+
+                                        alert("La suppression de l'élément a échoué !");
+                                        console.log(tryDelete);
+                                        return false;
+
+                                }
+
+                                alert("L'élément a bien été supprimé !");
+                                viewFullPost(user, situation);
+                                
+                        } else if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status !== 200 || httpRequest.status !== 0)) {
+
+                                alert("Erreur de chargement des données !");
+                                return false;
+
+                        } else {
+
+                                document.getElementsByTagName("body")[0].style.cursor = "wait";
+
+                        }
+
+                }
+
+                httpRequest.open('POST', url, true);
+                httpRequest.send();
+
+        }
+
+    }
+
+    function disconnected () {
+
+        alert('Vous avez été déconnecté(e) !');
+        document.location.reload(true);
+
+    }
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//       VISUALISATION DES UTILISATEURS DANS LA NAVIGATION A GAUCHE DE L'ECRAN       //
+///////////////////////////////////////////////////////////////////////////////////////
+
+function changeViewList () {
+
+    checkConnected().then(view, disconnected);
+
+    function view () {
+
+        var httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+
+                alert('Impossible de créer une instance de XMLHTTP');
+                return false;
+
+        }
+
+        httpRequest.responseType = 'text';
+        var url = Routing.generate('list_choice');
+        var mainNav = document.getElementById('userNavigation');
+
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status === 200 || httpRequest.status === 0)) {
+
+                document.getElementsByTagName("body")[0].style.cursor = "default";
+                var data = httpRequest.responseText;
+                mainNav.innerHTML = data;
+
+            } else if (httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status !== 200 || httpRequest.status !== 0)) {
+
+                alert("Erreur de chargement des données !");
+                return false;
+
+            } else {
+
+                document.getElementsByTagName("body")[0].style.cursor = "wait";
+
+            }
+        }
+
+        httpRequest.open('POST', url, true);
+        httpRequest.send();
+
+    }
+
+    function disconnected () {
+
+        alert('Vous avez été déconnecté(e) !');
+        document.location.reload(true);
+
+    }
+
+}
+ 
+
+function checkConnected ()
+{
+
+    return new Promise( (resolve, reject) => {
+
+        var httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+
+            alert('Impossible de créer une instance de XMLHTTP');
+            return false;
+
+        }
+        
+        httpRequest.responseType = "text";
+        var url = Routing.generate('user_check_connected');
+
+        httpRequest.onreadystatechange = function () {
+
+            if ( httpRequest.readyState === XMLHttpRequest.DONE && (httpRequest.status === 200 || httpRequest.status === 0) ) {
+
+                if ( httpRequest.responseText === '1' ) {
+                    resolve();
+                } else {
+                    reject();
+                }
+
+            } 
+
+        }
+
+        httpRequest.open('POST', url, true);
+        httpRequest.send();
+
+    });
+
+}
