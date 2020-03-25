@@ -79,7 +79,7 @@ class Mailer extends Controller
                     ->setSubject('Hello Email')
                     ->setFrom('sauronlemaudit@gmail.com')
                     ->setTo(''.$user->getEmail())
-                    ->setBody($this->templating->render('templates\Email\confirm.html.twig', [
+                    ->setBody($this->templating->render('Templates\Email\confirm.html.twig', [
                         'user'  => $user
                     ]), 
                     'text/html'

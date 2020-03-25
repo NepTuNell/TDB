@@ -14,11 +14,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * Referentieldetail controller.
@@ -72,75 +69,78 @@ class SituationDetailsController extends Controller
             throw $this->createAccessDeniedException('Veuillez vous connecter !');
         }
         
+        $error             = false;
+        $errors            = null;
+        $message           = null;
         $situationDetails  = new SituationDetails;
-        $form             = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
+        $form              = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
         $form->handleRequest($request);
         
         if ( "POST" === $request->getMethod() ) {
             
             if ( $form->isSubmitted() && $form->isValid() ) {
                 
-                if ( count($situationDetails->getCompetences()) === 0 ) {
+                if ( count($situationDetails->getCompetences()) !== 0 ) {
 
-                    return $this->render('Situationdetails/new.html.twig', array(
-                        'situation'     => $situation,
-                        'form' => $form->createView(),
-                        'message' => ['Veuillez sélectionner au moins une compétence !']
-                    ));
+                    $situationDetails->setSituation($situation);  
                     
-                }
-
-                $situationDetails->setSituation($situation);  
-                
-                foreach ($situationDetails->getPictures() as $picture) {
+                    foreach ($situationDetails->getPictures() as $picture) {
+                        
+                        $picture->setSituationDetails($situationDetails);
+                        
+                    }
                     
-                    $picture->setSituationDetails($situationDetails);
+                    if ( $this->isGranted('ROLE_ADMIN') ) {
+
+                        $this->addFlash('success', 'Descriptif mis à jour !');
+                        $situationDetails->setValidated(true);
+
+                    } else {
+
+                        $this->addFlash('success', 'Votre descriptif à bien été enregistré. Un administrateur le validera sous 24 heures !');
+                        $situationDetails->setValidated(false);
+
+                    }
+
+                    $this->manager->persist($situationDetails);
+                    $this->manager->flush();
+
+                    /**
+                     * Passage en édition
+                     */
+                    return $this->RedirectToRoute('situation_details_edit', ['id' => $situationDetails->getId()]);
                     
-                }
-                
-                if ( $this->isGranted('ROLE_ADMIN') ) {
-
-                    $this->addFlash('success', 'Descriptif mis à jour !');
-                    $situationDetails->setValidated(true);
-
                 } else {
 
-                    $this->addFlash('success', 'Votre descriptif à bien été enregistré. Un administrateur le validera sous 24 heures !');
-                    $situationDetails->setValidated(false);
+                    $message = ['Veuillez sélectionner au moins une compétence !'];
+                    $error   = true;
 
                 }
-
-                $this->manager->persist($situationDetails);
-                $this->manager->flush();
-
-                /**
-                 * Actualisation de l'entité et du formulaire
-                 */
-                $this->manager->refresh($situationDetails);
-                $form = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
-
-                return $this->render('Situationdetails/new.html.twig', array(
-                    'situation'  => $situation,
-                    'form'       => $form->createView(),
-                ));
                 
             } else {
                 
                 $errors = $this->get('validator')->validate($situationDetails);
-                
-                return $this->render('Situationdetails/new.html.twig', [
-                    'situation'     => $situation,
-                    'form'          => $form->createView(),
-                    'errors'        => $errors,
-                ]);
+                $error  = true;
                 
             }
             
         }
         
+        if ( $error ) {
+
+            foreach ( $situationDetails->getPictures() as $picture ) {
+                $situationDetails->removePicture($picture);
+            }
+
+            $form = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
+
+        }
+
         return $this->render('Situationdetails/new.html.twig', array(
-            'situation'     => $situation,
-            'form' => $form->createView(),
+            'situation' => $situation,
+            'form'      => $form->createView(),
+            'errors'    => $errors,
+            'message'   => $message
         ));
 
     }
@@ -161,71 +161,61 @@ class SituationDetailsController extends Controller
             throw $this->createAccessDeniedException('Veuillez vous connecter !');
         }
 
-        $form = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
+        $errors  = null;
+        $message = null;
+        $form    = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
         $form->handleRequest($request);
      
         if ( "POST" === $request->getMethod() ) {
             
             if ( $form->isSubmitted() && $form->isValid() ) {
                
-                if ( count($situationDetails->getCompetences()) === 0 ) {
+                if ( count($situationDetails->getCompetences()) !== 0 ) {
 
-                    return $this->render('Situationdetails/edit.html.twig', array(
-                        'form' => $form->createView(),
-                        'situationDetail' => $situationDetails,
-                        'message' => ['Veuillez sélectionner au moins une compétence !']
-                    ));
+                    foreach ($situationDetails->getPictures() as $picture) {
                     
-                }
-
-                foreach ($situationDetails->getPictures() as $picture) {
+                        $picture->setSituationDetails($situationDetails);
+                        
+                    }
                     
-                    $picture->setSituationDetails($situationDetails);
-                    
-                }
-                
-                if ( $this->isGranted('ROLE_ADMIN') ) {
-
-                    $this->addFlash('success', 'Descriptif mis à jour !');
-                    $situationDetails->setValidated(true);
-
+                    if ( $this->isGranted('ROLE_ADMIN') ) {
+    
+                        $this->addFlash('success', 'Descriptif mis à jour !');
+                        $situationDetails->setValidated(true);
+    
+                    } else {
+    
+                        $this->addFlash('success', 'Votre descriptif à bien été enregistré. Un administrateur le validera sous 24 heures !');
+                        $situationDetails->setValidated(false);
+    
+                    }
+               
+                    $this->manager->persist($situationDetails);
+                    $this->manager->flush();
+    
                 } else {
 
-                    $this->addFlash('success', 'Votre descriptif à bien été enregistré. Un administrateur le validera sous 24 heures !');
-                    $situationDetails->setValidated(false);
+                    $message = ['Veuillez sélectionner au moins une compétence !'];       
 
                 }
-           
-                $this->manager->persist($situationDetails);
-                $this->manager->flush();
-
-                /**
-                 * Actualisation de l'entité et du formulaire
-                 */
-                $this->manager->refresh($situationDetails);
-                $form = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
-              
-                return $this->render('Situationdetails/edit.html.twig', array(
-                    'form' => $form->createView(),
-                    'situationDetail' => $situationDetails
-                ));
                 
             } else {
                 
                 $errors = $this->get('validator')->validate($situationDetails);
-                return $this->render('Situationdetails/edit.html.twig', array(
-                    'form' => $form->createView(),
-                    'errors' => $errors,
-                    'situationDetail' => $situationDetails
-                ));
                 
             }
             
         }
+
+        // Réactualisation de l'objet et du formulaire
+        $this->manager->refresh($situationDetails);
+        $form = $this->createForm('SioBundle\Form\SituationDetailsType', $situationDetails);
         
         return $this->render('Situationdetails/edit.html.twig', array(
-            'form' => $form->createView(),
-            'situationDetail' => $situationDetails
+            'form'            => $form->createView(),
+            'situationDetail' => $situationDetails,
+            'errors'          => $errors,
+            'message'         => $message
         ));
         
     }

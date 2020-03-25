@@ -8,7 +8,7 @@
         <i class="fas fa-undo userNavUndo imgCursor" onclick="window.location.href='{{path('user_index')}}'"></i>
     {% endif %}
     <i class="fas fa-eye userNavEye imgCursor" onclick="changeViewList()"></i>
-    <ul class="col-12">
+    <ul class="col-12 userNavContainer">
         <div class="row justify-content-around">
             <h5 class="user_nav_lib">Missions</h5>
         </div>
@@ -23,7 +23,7 @@
     {% if userList is defined and userList is not null %}
     <i class="fas fa-undo userNavUndo imgCursor" onclick="window.location.href='{{path('user_index')}}'"></i>
     <i class="fas fa-eye userNavEye imgCursor" onclick="changeViewList()"></i>
-    <ul class="col-12">
+    <ul class="col-12 userNavContainer">
         <div class="row justify-content-around">
             <h5 class="user_nav_lib">Utilisateurs</h5>
         </div>

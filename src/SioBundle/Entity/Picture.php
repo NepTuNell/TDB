@@ -53,18 +53,13 @@ class Picture
     /**
      * 
      * @Assert\File(
-     *   maxSize = "2M",
-     *   mimeTypes = {
-     *       "image/png",
-     *       "image/jpeg",
-     *       "image/jpg",
-     *       "image/gif"
-     *   },
-     *   mimeTypesMessage = "Format de l'image non supportée, assurez vous d'utiliser ces formats : png, jpg, jpeg, gif.",
-     *   maxSizeMessage = "Fichier trop volumineux, l'image ne doit pas excéder 2 mo."
+     *   maxSize = "25M",
+     *   maxSizeMessage = "Fichier trop volumineux, l'image ne doit pas excéder 25 mo.",
+     *   mimeTypes = {"image/png", "image/jpeg", "image/jpg"},
+     *   mimeTypesMessage = "Format de l'image non supportée, assurez vous d'utiliser ces formats : png, jpg/jpeg."
      * )
-     *
-     * @var type 
+     * 
+     * @var UploadedFile
      */
     protected $picture;
     

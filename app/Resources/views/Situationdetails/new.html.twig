@@ -5,7 +5,7 @@
 
         <div class="offset-1 col-10 offset-1">
 
-            <h2 class="col-12 text-center">Nouveau descriptif</h2>
+            <h2 class="col-12 text-center">Nouvelle situation</h2>
 
             {{ include('Templates/Error/flash.html.twig') }}
             
@@ -28,8 +28,9 @@
                     </table>
 
                     <div class="form-group row" style="margin-top: 2%;">
-                        <div class="col-2">
-                            <input class="btn btn-primary" type="submit" value="Valider"/>
+                        <div class="col-12">
+                            <input class="btn btn-primary button-size" type="submit" value="Valider"/>
+                            <input type="button" value="Retour" onclick="window.location.href='{{ path('user_index') }}'" class="btn btn-secondary button-size"/>
                         </div>
                     </div>
 

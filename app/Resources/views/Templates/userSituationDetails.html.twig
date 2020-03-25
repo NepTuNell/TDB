@@ -6,7 +6,7 @@
             <div class="col-12 text-center">
                 <strong>
                     <span id="situation_libelle">
-                        {{ situation.libelle | striptags | nl2br }}
+                        {{ situation.libelle | striptags }}
                     </span>
                 </strong>
                 <br><br>
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="col-12 user_description">
-                    {{ situationDetails.description | raw | nl2br  }}
+                    {{ situationDetails.description | raw }}
                 </div>
 
             </div>
@@ -41,19 +41,10 @@
             <!-- Traitement du carousel -->
             <div id="carousel{{situationDetails.id}}" class="carousel slide" data-ride="carousel">
 
-                <!-- Indicators -->
-                {% if situationDetails.pictures|length > 1  %}
-                    <ol class="carousel-indicators">
-                        {% for picture in situationDetails.pictures %}
-                            <li data-target="#carousel{{situationDetails.id}}" data-slide-to="{{loop.index0}}"></li>
-                        {% endfor %}
-                    </ol>
-                {% endif %}
-
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
                     {% for picture in situationDetails.pictures %}
-                        <div {% if loop.index0 == 0 %} class="carousel-item active col-12" {%else%} class="carousel-item col-12" {%endif%}>
+                        <div {% if loop.index0 == 0 %} class="carousel-item active col-12" {% else %} class="carousel-item col-12" {% endif %}>
                             <img class="col-12 image_carousel" onclick="resize(this)" alt="{{picture.alt}}" src="{{asset('uploads/img/'~picture.getFileName())}}"/>
                         </div>
                     {% endfor %}
@@ -69,6 +60,15 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                     </a>
+                {% endif %}
+
+                <!-- Indicators -->
+                {% if situationDetails.pictures|length > 1  %}
+                    <ol class="carousel-indicators">
+                        {% for picture in situationDetails.pictures %}
+                            <li {% if loop.index0 == 0 %}class="active"{% endif %} data-target="#carousel{{situationDetails.id}}" data-slide-to="{{loop.index0}}">{{loop.index0+1}}</li>
+                        {% endfor %}
+                    </ol>
                 {% endif %}
 
             </div>
@@ -109,24 +109,32 @@
         <div class="row"> {% if user is defined and user is not null %}
 
             <div class="col-12 text-center" id="user_username">
-                Profil de :
-                {{ user.username | striptags | nl2br }}
+                Présentation :
+                {{ user.username | striptags }}
             </div>
 
             <br><br>
 
             {% if user.description is not null or user.description is not empty %}
                 <div class="col-12 user_description">
-                    {{ user.description | raw | nl2br }}
+                    {{ user.description | raw }}
                 </div>
             {% else %}
                 <div class="col-12 text-center user_description">
                     Aucune description disponible sur le profil de
-                    {{ user.username | striptags | nl2br }}
+                    {{ user.username | striptags }}
                 </div>
             {% endif %}
 
         {% endif %}
     </div>
 
+<script>
+
+function viewImg() 
+{
+
+}
+
+</script>
 {% endif %}

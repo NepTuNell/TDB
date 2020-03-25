@@ -42,6 +42,7 @@ class Situation
      * @ORM\Column(name="libelle", type="string", length=255)
      * @Assert\Length(
      *      min=4,
+     *      max=50,
      *      minMessage = "Le libelle est trop court !",
      *      maxMessage = "Le libelle est trop long !"
      * )

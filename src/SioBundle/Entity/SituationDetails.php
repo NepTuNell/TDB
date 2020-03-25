@@ -25,7 +25,6 @@ class SituationDetails
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Serializer\Groups({"details"})
      */
     private $id;
 
@@ -41,28 +40,25 @@ class SituationDetails
      *      message="Veuillez renseigner votre situation !"
      * )
      * @ORM\Column(name="description", type="text")
-     * @Serializer\Groups({"details"})
      */
     private $description;
     
     /**
      * 
      * @ORM\OneToMany(targetEntity="SioBundle\Entity\Picture", mappedBy="situationDetails", cascade={"persist", "remove"})
-     * @Serializer\Groups({"details"})
+     * @Assert\Valid()
      */ 
     protected $pictures;
 
     /**
      * 
      * @ORM\ManyToMany(targetEntity="AdminBundle\Entity\Competences")
-     * @Serializer\Groups({"details"})
      */ 
     private $competences;
     
     /**
      * @var boolean
      * @ORM\Column(name="validated", type="boolean", options={"default" : 0})
-     * @Serializer\Groups({"details"})
      */
     private $validated;
     

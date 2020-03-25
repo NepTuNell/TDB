@@ -18,6 +18,7 @@ class PictureType extends AbstractType
         $builder->add('picture', FileType::class, [
             'label'     => false,
             'attr'      => ['class' => 'button-size'],
+            'error_bubbling' => true,
         ]);
     }
     

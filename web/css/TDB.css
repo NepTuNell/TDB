@@ -217,6 +217,35 @@ i  {
     overflow: scroll;
 }
 
+/*///////////////////////////////////////////////////////////////
+//     CONTAINER DES LISTES DE SELECTION DES COMPETENCES       //
+///////////////////////////////////////////////////////////////*/
+.userNavContainer {
+    word-break: break-word;
+}
+
+.carousel-indicators {
+    position: relative !important;
+    margin-right: none !important;
+    margin-left: none !important;
+    font-family: none !important;
+    margin-top: 5px;
+}
+
+.carousel-indicators li {
+    box-sizing: none !important;
+    width: auto !important;
+    height: auto !important;
+    margin-right: 10px !important;
+    margin-left: 10px !important;
+    text-indent: 0px !important;
+    background-color: transparent !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    color: black;
+    font-size: 1.2em;
+    display: block !important;
+}
 
 /*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //            MOBILE             
