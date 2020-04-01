@@ -1,0 +1,22 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}SioBundle:VueJs:index{% endblock %}
+
+{% block body %}
+<h1>Welcome to the VueJs:index page</h1>
+<div id="app">
+  ${ message } ${ prenom } ${ nom }
+</div>
+ 
+<script>
+  var app = new Vue({
+  delimiters: delimiters: ['${', '}'],
+  el: '#app',
+  data: {
+    message: 'Hello Vue!',
+    prenom: 'Jimmy',
+    nom:    'CHU VAN'
+  }
+})
+</script>
+{% endblock %}

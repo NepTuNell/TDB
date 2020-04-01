@@ -1,0 +1,12 @@
+/.web-server-pid
+/build/
+/phpunit.xml
+var/
+tests/
+vendor/
+web/bundles
+web/upload
+web/backup
+web/doc-sphinx
+app/config
+src/AppBundle

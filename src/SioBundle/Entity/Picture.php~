@@ -1,0 +1,178 @@
+<?php
+
+namespace SioBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+
+/**
+ * Files
+ *
+ * @ORM\Table(name="picture")
+ * @ORM\Entity(repositoryClass="SioBundle\Repository\PictureRepository")
+ */
+class Picture
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity=ReferentielDetails::class)
+     */
+    private $referentielDetails;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="url", type="string", length=255, nullable=true, unique=true)
+     */
+    private $url;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alt", type="string", length=255, nullable=true)
+     */
+    private $alt;
+    
+    /**
+     * 
+     * @Assert\File(
+     *   maxSize = "100M",
+     *   mimeTypes = {
+     *       "image/png",
+     *       "image/jpeg",
+     *       "image/jpg",
+     *       "image/gif"
+     *   },
+     *   mimeTypesMessage = "Format de l'image non supportée, assurez vous d'utiliser ces formats : png, jpg, jpeg, gif.",
+     *   maxSizeMessage = "Fichier trop volumineux, l'image ne doit pas excéder 3 mo."
+     * )
+     *
+     * @var type 
+     */
+    private $picture;
+    
+    
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+
+    /**
+     * Get alt
+     *
+     * @return string
+     */
+    public function getAlt()
+    {
+        return $this->alt;
+    }
+   
+    
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+    
+    
+    /**************************************
+     * GESTION DES FICHIERS VIA UPLOAD
+     **************************************/
+    
+    
+    public function setPicture(UploadedFile $picture = null)
+    {
+         
+        $this->picture = $picture;
+        
+        return $this;
+        
+    }
+    
+   
+    
+    
+    public function upload()
+    {
+        
+        $root = $this->getUploadRootDir().'/'.$this->getUrl();
+        
+        if( null !== $this->getUrl() && file_exists($root) ) {
+                
+            unlink($root);
+                
+        }
+        
+        // Si jamais il n'y a pas de fichier (champ facultatif), on ne fait rien
+        if (null === $this->picture) {
+       
+            // On réinitialise les valeurs des attributs url et alt
+            $this->url = null;
+            $this->alt = null;
+            return;
+
+        }
+        
+        $name = Date("d-m-Y")."_".$this->picture->getClientOriginalName(); // On récupère le nom original du fichier de l'internaute
+        
+        while (file_exists($this->getUploadRootDir()."/".$name)) {
+            
+            $name = Date("d-m-Y")."_".rand(1, 1000)."_".$this->picture->getClientOriginalName(); // On récupère le nom original du fichier de l'internaute
+            
+        }
+        
+        $this->picture->move($this->getUploadRootDir(), $name); // On déplace le fichier envoyé dans le répertoire de notre choix
+        $this->url = $name; // On sauvegarde le nom de fichier dans notre attribut $url
+        $this->alt = $this->picture->getClientOriginalName(); // On crée également le futur attribut alt de notre balise <img>
+
+    }
+
+
+    public function getUploadDir()
+    {
+
+      // On retourne le chemin relatif vers l'image pour un navigateur (relatif au répertoire /web donc)
+
+      return 'uploads/img';
+
+    }
+
+
+    public function getUploadRootDir()
+    {
+
+      // On retourne le chemin relatif vers l'image pour notre code PHP
+
+      return '/var/www/html/TDB/web/'.$this->getUploadDir();
+
+    }
+    
+    
+}
+
