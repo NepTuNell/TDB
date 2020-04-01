@@ -1,0 +1,159 @@
+<?php
+
+namespace SioBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use SioBundle\Entity\User;
+
+
+/**
+ * Referentiel
+ * @UniqueEntity( 
+ *      fields = {"code"},
+ *      errorPath="code",
+ *      message="Ce référentiel existe déjà !"
+ * )
+ * @ORM\Table(name="referentiel")
+ * @ORM\Entity(repositoryClass="SioBundle\Repository\ReferentielRepository")
+ */
+class Referentiel
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     *
+     * @var type 
+     * 
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $user;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=25, unique=true)
+     * @Assert\Length(
+     *      min=4,
+     *      max=15,
+     *      minMessage = "Le code est trop court !",
+     *      maxMessage = "Le code est trop long !"
+     * )
+     * @Assert\NotBlank
+     */
+    private $code;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libelle", type="string", length=255, unique=true)
+     * @Assert\Length(
+     *      min=4,
+     *      max=30,
+     *      minMessage = "Le libelle est trop court !",
+     *      maxMessage = "Le libelle est trop long !"
+     * )
+     * @Assert\NotBlank
+     */
+    private $libelle;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="obligatoire", type="boolean", nullable=true)
+     */
+    private $obligatoire;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return Referentiel
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     *
+     * @return Referentiel
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+    /**
+     * Set obligatoire
+     *
+     * @param boolean $obligatoire
+     *
+     * @return Referentiel
+     */
+    public function setObligatoire($obligatoire)
+    {
+        $this->obligatoire = $obligatoire;
+
+        return $this;
+    }
+
+    /**
+     * Get obligatoire
+     *
+     * @return bool
+     */
+    public function getObligatoire()
+    {
+        return $this->obligatoire;
+    }
+}

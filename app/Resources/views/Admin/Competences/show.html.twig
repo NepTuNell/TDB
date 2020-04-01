@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+   
+    <div class="row" style=" margin-top: 5%; margin-bottom: 2%;">
+        <div class="offset-2 col-10"> 
+            <button class="btn btn-primary button-size" onclick="window.location.href='{{ path('admin_competence_edit') }}'">
+                <i class="fas fa-plus-circle"></i>Nouveau
+            </button>
+        </div>
+    </div>
+        
+    <div class="row">
+        <div class="offset-2 col-8" id="table_div">
+            {%if competences is defined%}
+                <table class="table table-hover">
+                    <tr><th>Code</th><th colspan="3">Libelle</th></tr>
+                    {% for competence in competences %}
+                        <tr> 
+                            <td> {{ competence.code }} </td>
+                            <td> {{ competence.libelle }} </td> 
+                            <td> <a href="{{ path('admin_competence_edit', {'competence' : competence.id}) }}">Modifier</a> </td> 
+                            <td> <a href="{{ path('admin_competence_delete', {'competence' : competence.id}) }}">Supprimer</a> </td> 
+                        </tr> 
+                    {%endfor%}
+                </table>
+            {% endif%}
+        </div>
+    </div>
+        
+    <div class="row" style=" margin-top: 2%;">
+        <div class="offset-2 col-10"> 
+            <button class="btn btn-secondary button-size" onclick="window.location.href='{{ path('admin_dashboard') }}'">
+                Retour
+            </button> 
+        </div>
+    </div>
+            
+{% endblock %}

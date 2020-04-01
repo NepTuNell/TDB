@@ -1,0 +1,106 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    {% if competences is defined and referentiels is defined and situations is defined %}
+        <div class="row" id="page_dashboard">
+
+            <div id="table_dashboard">
+
+                <table class="table table-hover col-12" id="table">
+                    <tr id="dashboard_entete">
+                        <th class="dashboard_situation">
+                            <p class="dashboard" style="color: black;">
+                                <span style="font-weight: bold; text-decoration: underline; color: red; font-size: 1vw;">
+                                    Liste des compétences obligatoires absentes :
+                                </span>
+                                </br></br>
+                                {% if competencesObligatoires is defined and competencesObligatoires is not null %}
+                                    {% for competenceObligatoire in competencesObligatoires %}
+                                        {{ competenceObligatoire }}
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
+                        </th>
+                        {% for referentiel in referentiels %}
+                            <th>
+                                <p class="dashboard" id="{{'Entete' ~ (loop.index0 + 1)}}">{{referentiel.libelle}}</p>
+                            </th>
+                        {% endfor %}
+                        {% for competence in competences %}
+                            <th>
+                                <p class="dashboard" id="{{'Entete' ~ (loop.index0 + 1 + referentiels|length)}}">{{competence}}</p>
+                            </th>
+                        {% endfor %}
+                    </tr>
+
+                    {% for situation in situations %}
+                        <tr>
+                            <th class="dashboard_situation">{{situation.libelle}}</th>
+
+                            {% for referentiel in referentiels %}
+
+                                {% set exist = 0 %}
+                                {% for ref in situation.referentiels %}
+                                    {% if referentiel == ref %}
+                                        {% set exist = 1 %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if exist %}
+                                    <td class="dashboard">X</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+
+                            {% endfor %}
+
+                            {% for competence in competences %}
+                                {% set exist = 0 %}
+
+                                {% for situationDetail in situation.situationDetails %}
+                                    {% if situationDetail.situation == situation %}
+                                        {% for comp in situationDetail.competences %}
+                                            {% if comp == competence %}
+                                                {% set exist = 1 %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if exist %}
+                                    <td class="dashboard">X</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                            {% endfor %}
+
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+
+            {% for competence in competencesObligatoires %}
+                <div class="col-12">
+                    {{ competence }}
+                </div>
+            {% endfor %}
+    
+            {{ include('Templates/Error/message.html.twig') }}
+
+        </div>
+        <!-- Visualisation de la compétence -->
+        <div id="modalDashboard" class="text-center row">
+            <div class="offset-11 col-1">
+                <i class="far fa-window-close modalDashboardClose" onclick="dashboardModelClose()"></i>
+            </div>
+            <span class="col-12" id="modalDashboardText"></span>
+        </div>
+    {% endif %}
+
+    <script>
+        {{ include('User/Javascript/dashboard.js') }}
+    </script>
+
+{% endblock %}

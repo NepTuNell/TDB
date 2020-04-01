@@ -1,0 +1,186 @@
+<?php
+
+namespace SioBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+/**
+ * Files
+ *
+ * @ORM\Table(name="files")
+ * @ORM\Entity(repositoryClass="SioBundle\Repository\FilesRepository")
+ */
+class Files
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="url", type="string", length=255, nullable=true, unique=true)
+     */
+    private $url;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alt", type="string", length=255, nullable=true)
+     */
+    private $alt;
+    
+    /**
+     *
+     * @var int 
+     * 
+     * @ORM\ManyToOne(targetEntity="SioBundle\Entity\ReferentielDetails")
+     */
+    private $referentielId;
+    
+    
+    private $file;
+    
+    
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+        
+        if (null !== $this->url) {
+            
+            // On réinitialise les valeurs des attributs url et alt
+            $this->url = null;
+            $this->alt = null;
+            
+        }
+        
+    }
+    
+   
+    
+    public function upload()
+    {
+
+        // Si jamais il n'y a pas de fichier (champ facultatif), on ne fait rien
+        if (null === $this->file) {
+
+          return;
+
+        }
+
+        $name = $this->file->getClientOriginalName(); // On récupère le nom original du fichier de l'internaute
+        $this->file->move($this->getUploadRootDir(), $name); // On déplace le fichier envoyé dans le répertoire de notre choix
+        $this->url = $name; // On sauvegarde le nom de fichier dans notre attribut $url
+        $this->alt = $name;  // On crée également le futur attribut alt de notre balise <img>
+
+    }
+
+
+    public function getUploadDir()
+    {
+
+      // On retourne le chemin relatif vers l'image pour un navigateur (relatif au répertoire /web donc)
+
+      return 'uploads/img';
+
+    }
+
+
+    protected function getUploadRootDir()
+    {
+
+      // On retourne le chemin relatif vers l'image pour notre code PHP
+
+      return __DIR__.'/var/www/html/TDB/web/'.$this->getUploadDir();
+
+    }
+
+    /**
+     * Set referentiel
+     *
+     * @param \SioBundle\Entity\ReferentielDetails $referentiel
+     *
+     * @return Files
+     */
+    public function setReferentiel(\SioBundle\Entity\ReferentielDetails $referentiel = null)
+    {
+        $this->referentiel = $referentiel;
+
+        return $this;
+    }
+
+    /**
+     * Get referentiel
+     *
+     * @return \SioBundle\Entity\ReferentielDetails
+     */
+    public function getReferentiel()
+    {
+        return $this->referentiel;
+    }
+    
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     *
+     * @return Files
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set alt
+     *
+     * @param string $alt
+     *
+     * @return Files
+     */
+    public function setAlt($alt)
+    {
+        $this->alt = $alt;
+
+        return $this;
+    }
+
+    /**
+     * Get alt
+     *
+     * @return string
+     */
+    public function getAlt()
+    {
+        return $this->alt;
+    }
+}
